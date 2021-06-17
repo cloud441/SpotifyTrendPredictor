@@ -2,16 +2,20 @@
 
 import sys
 import SpotifyAPI
+import DataLog
 
 
 def run(argv):
 
     api_manager = SpotifyAPI.APIManager() if (len(argv[1:]) == 0) else SpotifyAPI.APIManager(user=argv[1])
-    if (api_manager.api):
-        print(f'The API connection is established with user {api_manager.user}.')
-        api_manager.get_new_released()
-    else:
+    if not api_manager.api:
         print(f'Error: Impossible to established API connection with user {api_manager.user}')
+        return
+
+    print(f'\nThe API connection is established with user {api_manager.user}.\n')
+    data_logger = DataLog.DataLogger()
+    data_logger.load_trend_dataset(api_manager)
+    data_logger.save_to_csv('data/top_50.csv')
 
 
 
