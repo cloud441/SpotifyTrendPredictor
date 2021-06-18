@@ -3,6 +3,7 @@
 import sys
 import SpotifyAPI
 import DataLog
+from pprint import pprint
 
 
 def run(argv):
@@ -15,7 +16,10 @@ def run(argv):
     print(f'\nThe API connection is established with user {api_manager.user}.\n')
     data_logger = DataLog.DataLogger()
     data_logger.load_trend_dataset(api_manager)
-    data_logger.save_to_csv('data/top_50.csv')
+
+    pprint(data_logger.apply_pre_processing())
+
+    data_logger.save_to_csv('data/top_50_bis.csv')
 
 
 

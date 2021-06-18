@@ -4,6 +4,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from pprint import pprint
 
 
+PLAYLIST_TOP_50_GLOBAL = 'spotify:playlist:37i9dQZEVXbNG2KDcFcKOF'
+PLAYLIST_FORGOTIFY = 'spotify:playlist:4ItpnreD2Bkmu3D9OKEQip'
+
+
 class APIManager:
 
     def __init__(self, user='spotify_client'):
@@ -31,6 +35,8 @@ class APIManager:
                 print("Can't get token for", username)
 
 
+
+
     def get_new_released(self):
         if (self.user != 'spotify_client'):
             print(f'Error: Impossible to load new release song with user {self.user}')
@@ -49,14 +55,13 @@ class APIManager:
                     response = None
 
 
-    def get_trends_playlist(self, nb_entries):
+    def get_playlist(self, playlist_id):
         if (self.user != 'spotify_client'):
             print(f'Error: Impossible to load spotify playlist  with user {self.user}')
             return
 
 
-        top_50_global_id = 'spotify:playlist:37i9dQZEVXbNG2KDcFcKOF'
-        response = self.api.playlist_items(top_50_global_id,
+        response = self.api.playlist_items(playlist_id,
                 fields='items.track.id,total',
                 additional_types=['track'])
 
@@ -64,3 +69,12 @@ class APIManager:
             return [self.api.track("spotify:track:" + track['track']['id']) for track in response['items']]
 
         return []
+
+
+
+    def get_trends_playlist(self):
+        return self.get_playlist(PLAYLIST_TOP_50_GLOBAL)
+
+
+    def get_forgotify_playlist(self):
+        return self.get_playlist(PLAYLIST_FORGOTIFY)
